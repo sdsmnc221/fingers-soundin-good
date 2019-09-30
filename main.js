@@ -43,6 +43,12 @@ class Main {
     // Add video element to DOM
     document.body.appendChild(this.video);
 
+     // Create save button
+     const button = document.createElement('button')
+     button.innerText = "Save";
+     document.body.appendChild(button);
+     button.addEventListener('click', this.save.bind(this))
+
     // Create training buttons and info texts    
     for (let i = 0; i < NUM_CLASSES; i++) {
       const div = document.createElement('div');
@@ -82,6 +88,8 @@ class Main {
     this.knn = knnClassifier.create();
     this.mobilenet = await mobilenetModule.load();
 
+    this.load()
+
     this.start();
   }
 
@@ -97,6 +105,32 @@ class Main {
     this.video.pause();
     cancelAnimationFrame(this.timer);
   }
+
+  save() {
+    let dataset = this.knn.getClassifierDataset()
+    var datasetObj = {}
+    Object.keys(dataset).forEach((key) => {
+      let data = dataset[key].dataSync();
+      // use Array.from() so when JSON.stringify() it covert to an array string e.g [0.1,-0.2...] 
+      // instead of object e.g {0:"0.1", 1:"-0.2"...}
+      datasetObj[key] = Array.from(data); 
+    });
+    let jsonStr = JSON.stringify(datasetObj)
+    //can be change to other source
+    localStorage.setItem("myData", jsonStr);
+    console.log(localStorage['myData'])
+  }
+
+  load() {
+    //can be change to other source
+   let dataset = localStorage.getItem("myData")
+   let tensorObj = JSON.parse(dataset)
+   //covert back to tensor
+   Object.keys(tensorObj).forEach((key) => {
+     tensorObj[key] = tf.tensor(tensorObj[key], [tensorObj[key].length / 1000, 1000])
+   })
+   this.knn.setClassifierDataset(tensorObj);
+ }
 
   async animate() {
     if (this.videoPlaying) {
