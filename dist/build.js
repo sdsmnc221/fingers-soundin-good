@@ -182,12 +182,15 @@ var Main = function () {
     value: function load() {
       //can be change to other source
       var dataset = localStorage.getItem("myData");
-      var tensorObj = JSON.parse(dataset);
-      //covert back to tensor
-      Object.keys(tensorObj).forEach(function (key) {
-        tensorObj[key] = tf.tensor(tensorObj[key], [tensorObj[key].length / 1000, 1000]);
-      });
-      this.knn.setClassifierDataset(tensorObj);
+
+      if (dataset) {
+        var tensorObj = JSON.parse(dataset);
+        //covert back to tensor
+        Object.keys(tensorObj).forEach(function (key) {
+          tensorObj[key] = tf.tensor(tensorObj[key], [tensorObj[key].length / 1000, 1000]);
+        });
+        this.knn.setClassifierDataset(tensorObj);
+      }
     }
   }, {
     key: 'animate',
@@ -205,7 +208,7 @@ var Main = function () {
               }
 
               // Get image data from video element
-              image = tf.fromPixels(this.video);
+              image = tf.browser.fromPixels(this.video);
               logits = void 0;
               // 'conv_preds' is the logits activation of MobileNet.
 

@@ -126,18 +126,21 @@ class Main {
   load() {
     //can be change to other source
    let dataset = localStorage.getItem("myData")
-   let tensorObj = JSON.parse(dataset)
-   //covert back to tensor
-   Object.keys(tensorObj).forEach((key) => {
-     tensorObj[key] = tf.tensor(tensorObj[key], [tensorObj[key].length / 1000, 1000])
-   })
-   this.knn.setClassifierDataset(tensorObj);
+   
+   if (dataset) {
+    let tensorObj = JSON.parse(dataset)
+    //covert back to tensor
+    Object.keys(tensorObj).forEach((key) => {
+      tensorObj[key] = tf.tensor(tensorObj[key], [tensorObj[key].length / 1000, 1000])
+    })
+    this.knn.setClassifierDataset(tensorObj);
+   }
  }
 
   async animate() {
     if (this.videoPlaying) {
       // Get image data from video element
-      const image = tf.fromPixels(this.video);
+      const image = tf.browser.fromPixels(this.video);
 
       let logits;
       // 'conv_preds' is the logits activation of MobileNet.
