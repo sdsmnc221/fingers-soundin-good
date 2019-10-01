@@ -87,6 +87,12 @@ var Main = function () {
       button.addEventListener('mouseup', function () {
         return _this.training = -1;
       });
+      button.addEventListener('touchstart', function () {
+        return _this.training = i;
+      });
+      button.addEventListener('touchend', function () {
+        return _this.training = -1;
+      });
 
       // Create info text
       var infoText = document.createElement('span');
@@ -100,9 +106,7 @@ var Main = function () {
     }
 
     // Setup webcam
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false, facingMode: {
-        exact: 'environment'
-      } }).then(function (stream) {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(function (stream) {
       _this.video.srcObject = stream;
       _this.video.width = IMAGE_SIZE;
       _this.video.height = IMAGE_SIZE;
