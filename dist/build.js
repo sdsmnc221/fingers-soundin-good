@@ -100,7 +100,9 @@ var Main = function () {
     }
 
     // Setup webcam
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(function (stream) {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false, facingMode: {
+        exact: 'environment'
+      } }).then(function (stream) {
       _this.video.srcObject = stream;
       _this.video.width = IMAGE_SIZE;
       _this.video.height = IMAGE_SIZE;

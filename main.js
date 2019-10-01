@@ -73,7 +73,9 @@ class Main {
 
 
     // Setup webcam
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false, facingMode: { 
+      exact: 'environment'
+    } })
       .then((stream) => {
         this.video.srcObject = stream;
         this.video.width = IMAGE_SIZE;
